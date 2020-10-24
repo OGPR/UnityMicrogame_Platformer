@@ -24,9 +24,7 @@ public class Destructable : MonoBehaviour
             if (_collider.CompareTag("Player"))
             {
                 _playerHasHit = true;
-                float _rotationAngleZ = -30;
-                Quaternion _rotation = Quaternion.Euler(0, 0, _rotationAngleZ);
-                gameObject.transform.rotation = _rotation ;
+                Rotate(_rotationAngleZ);
 
                 // Pivot point is around center point:
                 // Simulate object having pivot point on base.
@@ -42,7 +40,15 @@ public class Destructable : MonoBehaviour
         }
     }
 
+    
+    private const float _rotationAngleZ = -30;
+    private float _angleInc = -1;
     private bool _playerHasHit = false;
+    private void Rotate(float angleInDegrees)
+    {
+        Quaternion _rotation = Quaternion.Euler(0, 0, angleInDegrees);
+        gameObject.transform.rotation = _rotation ;
+    }
     private bool RotatingRight(double rotationAngle)
     {
         return rotationAngle < 0;
