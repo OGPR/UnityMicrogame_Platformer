@@ -18,9 +18,44 @@ public class Destructable : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (!_playerHasHit)
         {
-            Destroy(gameObject);
+            GameObject _collider = collision.gameObject;
+            if (_collider.CompareTag("Player"))
+            {
+                _playerHasHit = true;
+                float _rotationAngleZ = -30;
+                Quaternion _rotation = Quaternion.Euler(0, 0, _rotationAngleZ);
+                gameObject.transform.rotation = _rotation ;
+
+                // Pivot point is around center point:
+                // Simulate object having pivot point on base.
+                if (RotatingRight(_rotationAngleZ))
+                {
+                    float _gameObjHeight = 5.12f; // hardcoded from boxcollier (TODO change this!)
+                    float _x = (_gameObjHeight / 2) * Mathf.Sin(DegToRad(_rotationAngleZ));
+                    float _y = (_gameObjHeight / 2) * (1 - Mathf.Cos(DegToRad(_rotationAngleZ)));
+                    gameObject.transform.position -= new Vector3(_x, 0, 0);
+                    gameObject.transform.position += new Vector3(0,-_y, 0);
+                }
+            }
         }
     }
+
+    private bool _playerHasHit = false;
+    private bool RotatingRight(double rotationAngle)
+    {
+        return rotationAngle < 0;
+    }
+
+    private bool RotatingLeft(double rotationAngle)
+    {
+        return rotationAngle > 0;
+    }
+
+    private float DegToRad(float angleInDegrees)
+    {
+        return (Mathf.PI/180f) * angleInDegrees;
+    }
+
 }
