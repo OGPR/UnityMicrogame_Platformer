@@ -13,7 +13,25 @@ public class Destructable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        float _currObjPosX = gameObject.transform.position.x;
+        if (_playerHasHit)
+        {
+            float _newRotationAngleZ = _rotationAngleZ + _angleInc--;
+            if (_newRotationAngleZ >= -90)
+            {
+                Rotate(_newRotationAngleZ);
+                if (RotatingRight(_rotationAngleZ))
+                {
+                    float _x = (_gameObjHeight / 2) * Mathf.Sin(DegToRad(_newRotationAngleZ));
+                    float _y = (_gameObjHeight / 2) * (1 - Mathf.Cos(DegToRad(_newRotationAngleZ)));
+                    gameObject.transform.position -= new Vector3(_x-_x_prev, 0, 0);
+                    gameObject.transform.position += new Vector3(0,-(_y-_y_prev), 0);
+                    _x_prev = _x;
+                    _y_prev = _y;
+                }
+            }
+
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -35,12 +53,17 @@ public class Destructable : MonoBehaviour
                     float _y = (_gameObjHeight / 2) * (1 - Mathf.Cos(DegToRad(_rotationAngleZ)));
                     gameObject.transform.position -= new Vector3(_x, 0, 0);
                     gameObject.transform.position += new Vector3(0,-_y, 0);
+                    _x_prev = _x;
+                    _y_prev = _y;
                 }
             }
         }
     }
 
-    
+
+    private float _x_prev = 0.0f;
+    private float _y_prev = 0.0f;
+    private const float _gameObjHeight = 5.12f; // hardcoded from boxcollier (TODO change this!)
     private const float _rotationAngleZ = -30;
     private float _angleInc = -1;
     private bool _playerHasHit = false;
