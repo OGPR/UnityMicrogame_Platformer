@@ -33,6 +33,11 @@ namespace Platformer.Mechanics
 
         void OnCollisionEnter2D(Collision2D collision)
         {
+            GameObject _collider = collision.gameObject;
+            if (_collider.CompareTag("tree"))
+            {
+                Schedule<EnemyDeath>().enemy = this;
+            } 
             var player = collision.gameObject.GetComponent<PlayerController>();
             if (player != null)
             {
