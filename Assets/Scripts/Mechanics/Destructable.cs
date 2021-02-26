@@ -36,7 +36,7 @@ public class Destructable : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!_playerHasHit)
+        if (++_playerHasHitCount == 3)
         {
             GameObject _collider = collision.gameObject;
             if (_collider.CompareTag("Player"))
@@ -67,6 +67,7 @@ public class Destructable : MonoBehaviour
     private const float _rotationAngleZ = -30;
     private float _angleInc = -1;
     private bool _playerHasHit = false;
+    private int _playerHasHitCount = 0;
     private void Rotate(float angleInDegrees)
     {
         Quaternion _rotation = Quaternion.Euler(0, 0, angleInDegrees);
