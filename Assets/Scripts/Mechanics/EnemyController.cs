@@ -36,7 +36,9 @@ namespace Platformer.Mechanics
             GameObject _collider = collision.gameObject;
             if (_collider.CompareTag("tree"))
             {
-                Schedule<EnemyDeath>().enemy = this;
+                Quaternion rotation = Quaternion.Euler(0, 0, -90);
+                if (_collider.transform.rotation != rotation)
+                    Schedule<EnemyDeath>().enemy = this;
             } 
             var player = collision.gameObject.GetComponent<PlayerController>();
             if (player != null)
